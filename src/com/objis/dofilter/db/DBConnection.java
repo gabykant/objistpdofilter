@@ -78,4 +78,30 @@ public class DBConnection {
 		}
 		return items;
 	}
+	
+	public int insertInsert(Item item) throws SQLException 
+	{
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			strCon = DriverManager.getConnection(url, username, mdp);
+			
+			Statement st = strCon.createStatement();
+			
+			String sqlStr = "INSERT INTO item VALUES(null,"
+					+ item.getUserid() + ",'"
+					+ item.getTitle()+ "', '"
+					+ item.getAuthor() + "');";
+			
+			result = st.executeUpdate(sqlStr);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
