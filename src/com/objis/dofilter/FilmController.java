@@ -19,7 +19,7 @@ import com.objis.dofilter.entity.Item;
  * Servlet implementation class FilmController
  */
 @WebFilter(filterName = "/submitFilm", 
-urlPatterns={"/*"})
+urlPatterns={"/submitFilm"})
 public class FilmController extends HttpServlet implements Filter {
 	private static final long serialVersionUID = 1L;
        
@@ -44,7 +44,7 @@ public class FilmController extends HttpServlet implements Filter {
 			Boolean authenticated = (Boolean) hreq.getSession().getAttribute("authenticated");
 			
 			if (authenticated == null || !authenticated) {
-				hresp.sendRedirect(hresp.encodeRedirectUrl("/login.jsp"));
+				hresp.sendRedirect(hresp.encodeRedirectUrl("/Module8Seance12/login.jsp"));
 				return;
 			}
 			
