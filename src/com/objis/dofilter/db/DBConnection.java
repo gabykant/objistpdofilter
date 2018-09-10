@@ -23,7 +23,7 @@ public class DBConnection {
 			
 			strCon = DriverManager.getConnection(url, username, mdp);
 			
-			String sql = "SELECT * FROM admin WHERE username = '" +Username +"' AND password='" +Password+"';";
+			String sql = "SELECT * FROM user WHERE email = '" +Username +"' AND password='" +Password+"';";
 			
 			Statement st = strCon.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			

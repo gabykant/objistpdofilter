@@ -1,8 +1,14 @@
 package com.objis.dofilter;
 
 import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +18,9 @@ import com.objis.dofilter.entity.Item;
 /**
  * Servlet implementation class FilmController
  */
-@WebServlet("/submitFilm")
-public class FilmController extends HttpServlet {
+@WebFilter(filterName = "/submitFilm", 
+urlPatterns={"/*"})
+public class FilmController extends HttpServlet implements Filter {
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -21,25 +28,45 @@ public class FilmController extends HttpServlet {
      */
     public FilmController() {
         super();
-        // TODO Auto-generated constructor stub
     }
+	
+	@Override
+	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
+			throws IOException, ServletException {
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try{
+			HttpServletRequest hreq = null;
+			HttpServletResponse hresp = null;
+			
+			if (arg0 instanceof HttpServletRequest) hreq = (HttpServletRequest) arg0;
+			if (arg1 instanceof HttpServletResponse) hresp = (HttpServletResponse) arg1;
+			
+			Boolean authenticated = (Boolean) hreq.getSession().getAttribute("authenticated");
+			
+			if (authenticated == null || !authenticated) {
+				hresp.sendRedirect(hresp.encodeRedirectUrl("/login.jsp"));
+				return;
+			}
+			
+			arg2.doFilter(hreq, hresp);
+		} catch(Throwable e) {
+			e.printStackTrace();
+		}
 		
-		Item item = new Item();
-		item.setAuthor(request.getParameter("filmauthor"));
-		item.setTitle(request.getParameter("fimltitle"));
 	}
 
+	@Override
+	public void init(FilterConfig arg0) throws ServletException {
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		Item item = new Item();
+//		item.setAuthor(request.getParameter("filmauthor"));
+//		item.setTitle(request.getParameter("fimltitle"));
+		System.out.println("jksfdkjsfdjk");
+	}
+
+	
 }
